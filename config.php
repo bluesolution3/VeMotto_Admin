@@ -1,14 +1,12 @@
 <?php
-
 $host = "localhost";
-$dbname = "vemotto_db";
-$username = "root";
-$password = ""; // default for xampp
+$db = "vemotto_db";
+$user = "root";
+$pass = "";
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 } catch (Exception $e) {
-    die("Database Connection Error: " . $e->getMessage());
+    die("DB Connection Error: " . $e->getMessage());
 }

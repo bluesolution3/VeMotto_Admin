@@ -3,73 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <title>Business Owners</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f5f7fa;
+            background: #eef1f5;
             margin: 0;
-            padding: 20px;
+            padding: 30px;
         }
 
         .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            max-width: 1200px;
+            max-width: 1300px;
             margin: auto;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         h2 {
-            margin-bottom: 20px;
             color: #333;
+            margin-bottom: 25px;
+            border-left: 4px solid #007bff;
+            padding-left: 12px;
         }
 
         .filters {
             display: flex;
             gap: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            align-items: center;
         }
 
-        select, button {
-            padding: 10px;
+        .filters select, .filters input {
+            padding: 10px 12px;
             font-size: 14px;
-            border-radius: 5px;
+            border-radius: 6px;
             border: 1px solid #ccc;
+            outline: none;
         }
 
         button {
-            background-color: #007bff;
+            padding: 10px 16px;
+            background: #007bff;
             color: white;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 14px;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background: #0056b3;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #fff;
+            margin-top: 15px;
         }
 
         table th {
             text-align: left;
-            padding: 12px;
-            background: #f1f1f1;
-            border-bottom: 1px solid #ddd;
+            background: #f7f9fc;
+            color: #555;
+            padding: 14px;
+            font-size: 14px;
+            border-bottom: 2px solid #e4e7eb;
         }
 
         table td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
+            padding: 14px;
+            border-bottom: 1px solid #e4e7eb;
+            font-size: 14px;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f4f8ff;
         }
 
         .status-active {
             background: #d4edda;
             color: #155724;
-            padding: 4px 8px;
-            border-radius: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
         }
@@ -77,32 +95,48 @@
         .status-inactive {
             background: #f8d7da;
             color: #721c24;
-            padding: 4px 8px;
-            border-radius: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
         }
 
         .view-btn {
-            padding: 6px 10px;
+            padding: 8px 12px;
             background: #28a745;
-            color: #fff;
-            border-radius: 4px;
-            font-size: 12px;
+            color: white;
+            border-radius: 5px;
             text-decoration: none;
+            font-size: 12px;
         }
 
         .view-btn:hover {
-            background: #1f7d34;
+            background: #1e7d34;
         }
 
+        .search-box {
+            flex: 1;
+        }
+
+        .search-box input {
+            width: 100%;
+        }
     </style>
 </head>
+
 <body>
+
 <div class="container">
+
     <h2>Business Owners</h2>
 
-    <form method="GET" class="filters">
+    <!-- Filters + Search -->
+    <form class="filters" method="GET">
+
+        <div class="search-box">
+            <input type="text" name="keyword" placeholder="Search by name, email or business...">
+        </div>
+
         <select name="status">
             <option value="">Status (All)</option>
             <option value="active" <?= ($_GET['status'] ?? '') == 'active' ? 'selected' : '' ?>>Active</option>
@@ -116,40 +150,44 @@
             <option value="BC" <?= ($_GET['province'] ?? '') == 'BC' ? 'selected' : '' ?>>British Columbia</option>
         </select>
 
-        <button type="submit">Apply Filters</button>
+        <button type="submit">Apply</button>
     </form>
 
+    <!-- Table -->
     <table>
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Owner Name</th>
-                <th>Business Name</th>
-                <th>Province</th>
-                <th>Status</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>View</th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th>Owner Name</th>
+            <th>Business Name</th>
+            <th>Province</th>
+            <th>Status</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>View</th>
+        </tr>
         </thead>
 
         <tbody>
         <?php if (!empty($owners)) : ?>
-            <?php foreach ($owners as $index => $owner): ?>
+            <?php foreach ($owners as $index => $o): ?>
                 <tr>
                     <td><?= $index + 1 ?></td>
-                    <td><?= $owner['first_name'] . ' ' . $owner['last_name'] ?></td>
-                    <td><?= $owner['business_name'] ?></td>
-                    <td><?= $owner['province'] ?></td>
+                    <td><?= $o['first_name'] . ' ' . $o['last_name'] ?></td>
+                    <td><?= $o['business_name'] ?></td>
+                    <td><?= $o['province'] ?></td>
+
                     <td>
-                        <span class="status-<?= $owner['status'] ?>">
-                            <?= ucfirst($owner['status']) ?>
+                        <span class="status-<?= $o['status'] ?>">
+                            <?= ucfirst($o['status']) ?>
                         </span>
                     </td>
-                    <td><?= $owner['email'] ?></td>
-                    <td><?= $owner['phone'] ?></td>
+
+                    <td><?= $o['email'] ?></td>
+                    <td><?= $o['phone'] ?></td>
+
                     <td>
-                        <a href="?view=<?= $owner['id'] ?>" class="view-btn">View</a>
+                        <a class="view-btn" href="?view=<?= $o['id'] ?>">View</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -164,5 +202,6 @@
     </table>
 
 </div>
+
 </body>
 </html>
